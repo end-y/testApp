@@ -3,11 +3,43 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Detail from './Screens/Detail';
+import Main from './Screens/Main';
+import { Provider } from 'react-redux';
+import store from './Reducers/Store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children:[{
+      path: "/",
+      element: <Main />,
+      children:[
+        {
+          path:"/detail/:detailId/edit",
+          element: <Detail edit={true} newPost={false} />
+        },
+        {
+          path:"/detail/:detailId",
+          element: <Detail edit={false} newPost={false}  />
+        },
+        {
+          path:"/detail/new",
+          element: <Detail edit={false} newPost={true} />
+        }
+      ]
+    }]
+  },
+  ,
+]);
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );
 
